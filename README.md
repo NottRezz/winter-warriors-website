@@ -11,13 +11,17 @@ npm run dev
 
 ## Hosting
 
-The site is hosted on GitHub Pages. Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which builds the site and publishes it, usually within a few minutes. If the build fails, the last working version stays live.
+**This GitHub repository is a public demo. It must only contain sample content.** Never commit or push real rosters, contact details or other real tournament information here. Anyone can read this repository, including earlier versions of its files.
 
-To set it up, push this project to GitHub, then go to **Settings > Pages** and set **Source** to **GitHub Actions**. Don't use **Deploy from a branch**: that publishes this README as a plain page instead of building the site. The workflow works out the `/repo-name/` sub-path by itself, and also works with a custom domain.
+The real website is a static site that can go on any web host:
 
-To let the site owner publish, add them under **Settings > Collaborators** with write access. On a free GitHub plan the repository must be public for Pages to work, so everything committed, including earlier versions, can be seen by anyone.
+1. Set `NEXT_PUBLIC_SITE_URL` to the live address, for example `https://example.com`, so social media previews can find the sharing image. If the site will live in a sub-folder, also set `NEXT_PUBLIC_BASE_PATH`, for example `/tournament`.
+2. Run `npm run build`, not `npx next build`, so the prefetch files end up where the site expects them.
+3. Upload everything inside `out/` to the host.
 
-To build locally, use `npm run build` rather than `npx next build`, so the prefetch files end up where the site expects them. It writes the static site to `out/`.
+### Demo site
+
+Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which publishes the demo to GitHub Pages. In **Settings > Pages**, set **Source** to **GitHub Actions**. **Deploy from a branch** publishes this README as a plain page instead of building the site.
 
 ## Updating content
 
