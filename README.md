@@ -13,7 +13,7 @@ npm run dev
 
 The site is hosted on GitHub Pages. Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which builds the site and publishes it, usually within a few minutes. If the build fails, the last working version stays live.
 
-To set it up, push this project to GitHub, then go to **Settings > Pages** and set **Source** to **GitHub Actions**. The workflow works out the `/repo-name/` sub-path by itself, and also works with a custom domain.
+To set it up, push this project to GitHub, then go to **Settings > Pages** and set **Source** to **GitHub Actions**. Don't use **Deploy from a branch**: that publishes this README as a plain page instead of building the site. The workflow works out the `/repo-name/` sub-path by itself, and also works with a custom domain.
 
 To let the site owner publish, add them under **Settings > Collaborators** with write access. On a free GitHub plan the repository must be public for Pages to work, so everything committed, including earlier versions, can be seen by anyone.
 
