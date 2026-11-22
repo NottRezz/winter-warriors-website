@@ -5,9 +5,12 @@ import { asset } from "@/lib/asset";
 /** A team logo on the background it was designed for. */
 export function TeamLogo({
   team,
+  small = false,
   className = "",
 }: {
   team: Team;
+  /** Uses the light 160px file, for logos up to about 56px. */
+  small?: boolean;
   className?: string;
 }) {
   return (
@@ -17,7 +20,7 @@ export function TeamLogo({
       } ${className}`}
     >
       <Image
-        src={asset(team.logo)}
+        src={asset(small ? team.logo.replace(".webp", "-sm.webp") : team.logo)}
         alt={`${team.name} logo`}
         width={640}
         height={640}

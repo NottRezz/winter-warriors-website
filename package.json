@@ -7,7 +7,8 @@
     "build": "next build && node scripts/flatten-segments.mjs",
     "start": "next start",
     "lint": "eslint",
-    "logos": "node scripts/prepare-logos.mjs"
+    "logos": "node scripts/prepare-logos.mjs",
+    "sponsors": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/prepare-sponsors.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.65.0",

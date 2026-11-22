@@ -13,7 +13,7 @@ export default function TeamsPage() {
         Welcome and best of luck to all four teams. Pick a team to see its roster and
         games.
       </PageHeader>
-      <div className="section grid grid-cols-2 gap-4 py-12 sm:gap-6 sm:py-16 lg:grid-cols-4">
+      <div className="section grid grid-cols-2 gap-4 py-7 sm:gap-6 sm:py-16 lg:grid-cols-4">
         {teams.map((team, index) => (
           <Reveal key={team.slug} delay={index * 0.07}>
             <TeamCard team={team} />

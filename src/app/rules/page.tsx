@@ -12,7 +12,7 @@ export default function RulesPage() {
       <PageHeader eyebrow="Fair play" title="Game Play & Rules">
         How games run, how points are awarded and how ties are broken.
       </PageHeader>
-      <div className="section max-w-4xl py-12 sm:py-16">
+      <div className="section max-w-4xl py-7 sm:py-16">
         {rules.length === 0 ? (
           <ComingSoon icon={ScrollText} title="Rules coming soon">
             The tournament rules, points system and tiebreakers will be posted here

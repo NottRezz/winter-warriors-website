@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 
 const FLAKES = 70;
+const FLAKES_ON_PHONES = 28;
 
 /** Light snowfall on a canvas. Stays off for visitors who prefer reduced motion. */
 export function Snow() {
@@ -15,7 +16,7 @@ export function Snow() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const resize = () => {
-      const ratio = Math.min(window.devicePixelRatio, 2);
+      const ratio = Math.min(window.devicePixelRatio, 1.5);
       canvas.width = canvas.offsetWidth * ratio;
       canvas.height = canvas.offsetHeight * ratio;
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
@@ -24,7 +25,8 @@ export function Snow() {
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
 
-    const flakes = Array.from({ length: FLAKES }, () => ({
+    const small = window.matchMedia("(max-width: 64rem)").matches;
+    const flakes = Array.from({ length: small ? FLAKES_ON_PHONES : FLAKES }, () => ({
       x: Math.random(),
       y: Math.random(),
       radius: 0.6 + Math.random() * 1.6,
@@ -57,11 +59,17 @@ export function Snow() {
       }
       frame = requestAnimationFrame(draw);
     };
-    frame = requestAnimationFrame(draw);
+    // Stops once it's scrolled away, to save batteries over a long day at the rink.
+    const visibility = new IntersectionObserver((entries) => {
+      cancelAnimationFrame(frame);
+      if (entries[entries.length - 1].isIntersecting) frame = requestAnimationFrame(draw);
+    });
+    visibility.observe(canvas);
 
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      visibility.disconnect();
     };
   }, []);
 

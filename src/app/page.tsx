@@ -1,5 +1,6 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { GameDay } from "@/components/game-day";
 import { Hero } from "@/components/hero";
 import { IceBackdrop } from "@/components/ice-backdrop";
 import { Reveal } from "@/components/reveal";
@@ -40,9 +41,10 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <GameDay />
 
       {/* The pale ice from the crest's background */}
-      <section className="relative isolate overflow-hidden bg-ice-200 py-16 text-plum-900 sm:py-24">
+      <section className="relative isolate overflow-hidden bg-ice-200 py-10 text-plum-900 sm:py-24">
         <IceBackdrop rink={false} className="text-plum-700/20" />
         <div className="section relative">
           <Reveal>
@@ -50,7 +52,7 @@ export default function Home() {
               Four teams. One weekend.
             </h2>
           </Reveal>
-          <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-7 sm:gap-x-6 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 sm:mt-10 gap-x-4 gap-y-7 sm:gap-x-6 lg:grid-cols-4">
             {teams.map((team, index) => (
               <Reveal key={team.slug} delay={index * 0.06}>
                 <TeamCard team={team} />
@@ -60,7 +62,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section py-16 sm:py-24">
+      <section className="section py-10 sm:py-24">
         <Reveal>
           <h2 className="display text-3xl sm:text-5xl">Tournament guide</h2>
         </Reveal>
@@ -89,7 +91,7 @@ export default function Home() {
       </section>
 
       <section className="border-t border-white/[0.08] bg-plum-900">
-        <div className="section grid items-center gap-10 py-16 sm:py-20 lg:grid-cols-[1fr_1.35fr]">
+        <div className="section grid items-center gap-10 py-10 sm:py-20 lg:grid-cols-[1fr_1.35fr]">
           <Reveal>
             <h2 className="display text-3xl sm:text-5xl">{venue.name}</h2>
             <address className="mt-4 text-lg text-ice-300 not-italic">
@@ -101,13 +103,14 @@ export default function Home() {
               href={venue.directions}
               target="_blank"
               rel="noreferrer"
-              className="text-link mt-6"
+              className="btn mt-6 h-12 max-lg:w-full"
             >
               Get directions
               <ArrowRight aria-hidden className="size-4" />
             </a>
           </Reveal>
-          <Reveal delay={0.1}>
+          {/* Left out on phones, where a map traps the scroll. Directions opens the maps app. */}
+          <Reveal delay={0.1} className="max-lg:hidden">
             <iframe
               title={`Map showing ${venue.name}`}
               src={venue.mapEmbed}

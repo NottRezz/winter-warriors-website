@@ -11,9 +11,7 @@ export default function SchedulePage() {
       <PageHeader eyebrow={tournament.dateLabel} title="Schedule & Scores">
         Game times, final scores and live standings for the weekend.
       </PageHeader>
-      <div className="section py-12 sm:py-16">
-        <ScheduleBoard />
-      </div>
+      <ScheduleBoard />
     </>
   );
 }

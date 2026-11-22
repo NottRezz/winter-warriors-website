@@ -9,7 +9,7 @@ export function isFinal(game: Game) {
   return game.homeScore !== undefined && game.awayScore !== undefined;
 }
 
-function isRoundRobin(game: Game) {
+export function isRoundRobin(game: Game) {
   return !game.stage || /round|robin|^rr$/i.test(game.stage);
 }
 
@@ -20,6 +20,48 @@ export function dayOf(game: Game) {
       new RegExp(`\\b${day.dayOfMonth}\\b`).test(game.day) ||
       game.day.toLowerCase().startsWith(day.weekday.slice(0, 3).toLowerCase()),
   );
+}
+
+/** A final that's still waiting for its teams. */
+export function isOpenFinal(game: Game) {
+  return !isRoundRobin(game) && !findTeam(game.home) && !findTeam(game.away);
+}
+
+/** How long a game runs when the schedule only gives its start. */
+const GAME_MS = 75 * 60_000;
+
+/** Start and end of a game from times like "8:15 – 9:15 AM" or "11:30 AM". */
+function gameWindow(game: Game) {
+  const day = dayOf(game);
+  const parts = [...game.time.matchAll(/(\d{1,2}):(\d{2})\s*([ap]m)?/gi)];
+  if (!day || parts.length === 0) return null;
+
+  const last = parts[parts.length - 1];
+  const endIsPm = last[3]?.toLowerCase() === "pm";
+  // In a range like "11:30 – 12:45 PM" only the end says AM or PM.
+  const startIsPm = parts[0][3]
+    ? parts[0][3].toLowerCase() === "pm"
+    : Number(parts[0][1]) % 12 > Number(last[1]) % 12
+      ? !endIsPm
+      : endIsPm;
+
+  const at = ([, hour, minute]: RegExpMatchArray, pm: boolean) => {
+    const hours = String((Number(hour) % 12) + (pm ? 12 : 0)).padStart(2, "0");
+    return Date.parse(`${day.date}T${hours}:${minute}:00${tournament.utcOffset}`);
+  };
+
+  const start = at(parts[0], startIsPm);
+  return { start, end: parts.length > 1 ? at(last, endIsPm) : start + GAME_MS };
+}
+
+export type GamePhase = "upcoming" | "live" | "over" | "final";
+
+/** Where a game is at, from its score and the clock. Before the clock is known, it's upcoming. */
+export function gamePhase(game: Game, now: number | null): GamePhase {
+  if (isFinal(game)) return "final";
+  const times = gameWindow(game);
+  if (now === null || !times || now < times.start) return "upcoming";
+  return now < times.end ? "live" : "over";
 }
 
 export type StandingRow = {

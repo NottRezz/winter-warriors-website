@@ -51,7 +51,7 @@ export function Hero() {
       <IceBackdrop rink={false} className="text-ice-100/[0.07]" />
       <Snow />
 
-      <div className="section relative grid items-center gap-7 pt-8 pb-10 sm:gap-10 sm:pt-14 sm:pb-12 lg:min-h-[calc(100svh-9.5rem)] lg:grid-cols-[1.05fr_1fr] lg:gap-8 lg:py-16">
+      <div className="section relative grid items-center gap-3 pt-4 pb-5 sm:gap-6 sm:pt-8 sm:pb-8 lg:min-h-[calc(100svh-9.5rem)] lg:grid-cols-[1.05fr_1fr] lg:gap-8 lg:py-16">
         <div className="text-center lg:text-left">
           <motion.p {...rise(0.05)} className="eyebrow">
             Raiders {tournament.division} hockey tournament
@@ -59,12 +59,12 @@ export function Hero() {
 
           <motion.h1
             {...rise(0.12)}
-            className="display mt-4 text-[clamp(3.25rem,9.5vw,6.25rem)] text-white"
+            className="display mt-2 text-[clamp(2.375rem,9.5vw,6.25rem)] lg:mt-4 text-white"
           >
             Winter Warriors
           </motion.h1>
 
-          <motion.p {...rise(0.2)} className="mt-6 text-xl text-ice-200">
+          <motion.p {...rise(0.2)} className="mt-2 text-ice-200 sm:text-xl lg:mt-6">
             {tournament.dateLabel}
             <span aria-hidden className="mx-2.5 hidden text-ice-300 sm:inline">
               ·
@@ -75,7 +75,7 @@ export function Hero() {
 
           <motion.div
             {...rise(0.28)}
-            className="mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-4 lg:justify-start"
+            className="mt-9 hidden flex-wrap items-center justify-center gap-x-7 gap-y-4 lg:flex lg:justify-start"
           >
             <Link href="/schedule" className="btn">
               View schedule
@@ -88,11 +88,9 @@ export function Hero() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          // No fade-in: it is the first thing to see on a slow arena connection.
           style={{ rotateX, rotateY, transformPerspective: 1100 }}
-          className="order-first mx-auto w-full max-w-[21rem] sm:max-w-[32rem] lg:order-none lg:max-w-none"
+          className="order-first mx-auto w-full max-w-[11rem] sm:max-w-[18rem] lg:order-none lg:max-w-none"
         >
           <Image
             src={asset("/logos/crest.webp")}
@@ -100,13 +98,15 @@ export function Hero() {
             width={1330}
             height={907}
             loading="eager"
+            fetchPriority="high"
+            decoding="sync"
             className="h-auto w-full"
           />
         </motion.div>
       </div>
 
       <div className="relative border-t border-white/10 bg-ink/40 backdrop-blur-sm">
-        <div className="section py-4">
+        <div className="section py-2.5 lg:py-4">
           <Countdown />
         </div>
       </div>

@@ -7,11 +7,11 @@ export function Footer() {
   const { venue, contactEmail } = tournament;
 
   return (
-    <footer className="border-t border-white/[0.08] bg-ink">
-      <div className="section grid gap-10 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
+    <footer className="border-t border-white/[0.08] bg-ink max-lg:pb-[calc(var(--tab-bar)+env(safe-area-inset-bottom))]">
+      <div className="section grid gap-4 py-7 lg:gap-10 lg:py-12 md:grid-cols-[1.4fr_1fr_1fr]">
         <div className="flex items-center gap-4">
           <Image
-            src={asset("/logos/crest.webp")}
+            src={asset("/logos/crest-sm.webp")}
             alt=""
             width={1330}
             height={907}
@@ -23,7 +23,7 @@ export function Footer() {
           </div>
         </div>
 
-        <nav aria-label="Footer">
+        <nav aria-label="Footer" className="max-lg:hidden">
           <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
             {navigation.map((item) => (
               <li key={item.href}>
@@ -40,7 +40,7 @@ export function Footer() {
             href={venue.directions}
             target="_blank"
             rel="noreferrer"
-            className="block hover:text-white"
+            className="block py-2 hover:text-white lg:py-0"
           >
             {venue.name}
             <br />

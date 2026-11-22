@@ -33,16 +33,16 @@ export function Countdown() {
   ];
 
   return (
-    <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between sm:gap-8">
-      <p className="text-ice-300">Opening day countdown</p>
+    <div className="flex flex-col items-center gap-0.5 sm:flex-row sm:justify-between sm:gap-8">
+      <p className="text-sm text-ice-300 lg:text-base">Opening day countdown</p>
       <dl
         role="timer"
         aria-label="Time until the tournament starts"
-        className="flex gap-7 sm:gap-9"
+        className="flex gap-5 sm:gap-9"
       >
         {units.map((unit) => (
           <div key={unit.label} className="flex items-baseline gap-1.5">
-            <dd className="font-display text-2xl font-bold text-white tabular-nums">
+            <dd className="font-display text-xl font-bold lg:text-2xl text-white tabular-nums">
               {unit.value === null ? "--" : String(unit.value).padStart(2, "0")}
             </dd>
             <dt className="order-last text-sm text-ice-300">{unit.label}</dt>

@@ -22,12 +22,37 @@
 
 :root {
   color-scheme: dark;
+  --header: calc(3.5rem + env(safe-area-inset-top, 0px));
+  --tab-bar: 4rem;
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --header: 4rem;
+  }
 }
 
 html {
   background: var(--color-plum-950);
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The page behind an open sheet stays put. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* No double-tap zoom delay, and a response the moment a finger lands. */
+:where(a, button, summary) {
+  touch-action: manipulation;
+}
+
+@media (hover: none) {
+  :where(a, button, summary):active {
+    opacity: 0.65;
+  }
 }
 
 body {
@@ -106,16 +131,79 @@ body {
     background: rgb(255 255 255 / 0.035);
   }
 
+  /* A raffle ticket, with a notch punched out at each end of the tear line. */
+  .ticket {
+    --stub: 4.25rem;
+    --notch: 0.7rem;
+    overflow: hidden;
+    border-radius: 0.875rem;
+    mask:
+      radial-gradient(circle var(--notch) at var(--stub) 0, transparent 95%, #000) top / 100% 51%
+        no-repeat,
+      radial-gradient(circle var(--notch) at var(--stub) 100%, transparent 95%, #000) bottom / 100%
+        51% no-repeat;
+  }
+
+  @media (min-width: 640px) {
+    .ticket {
+      --stub: 6rem;
+    }
+  }
+
+  .sheet {
+    position: fixed;
+    inset: auto 0 0;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 36rem;
+    max-height: 85svh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 1.25rem 1.25rem 0 0;
+    background: var(--color-plum-900);
+    color: var(--color-ice-100);
+  }
+
+  .sheet::backdrop {
+    background: rgb(10 6 14 / 0.65);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sheet[open] {
+      animation: sheet-up 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @media (max-width: 63.99rem) {
+      .view-in {
+        animation: view-in 220ms ease-out;
+      }
+    }
+  }
+
   .section {
     margin-inline: auto;
     width: 100%;
     max-width: 72rem;
-    padding-inline: 1rem;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
   }
 
   @media (min-width: 640px) {
     .section {
       padding-inline: 1.5rem;
     }
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+/* Fades only: a transform here would hold on to anything sticky inside. */
+@keyframes view-in {
+  from {
+    opacity: 0;
   }
 }
