@@ -15,16 +15,17 @@ export function TeamLogo({
 }) {
   return (
     <span
-      className={`block overflow-hidden ${
+      className={`relative block overflow-hidden ${
         team.logoSurface === "light" ? "bg-white" : "bg-black"
       } ${className}`}
     >
+      {/* Positioned, as Safari miscounts a percentage height inside a padded aspect-ratio box. */}
       <Image
         src={asset(small ? team.logo.replace(".webp", "-sm.webp") : team.logo)}
         alt={`${team.name} logo`}
         width={640}
         height={640}
-        className="size-full object-contain"
+        className="absolute inset-0 size-full p-[inherit] object-contain"
       />
     </span>
   );
