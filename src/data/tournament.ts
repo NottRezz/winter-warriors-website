@@ -383,7 +383,7 @@ export const raffle: {
       name: "Rink Ready",
       icon: "sticks",
       description:
-        "Everything a hockey family needs for the season: a quality stick for the ice, a heated stadium seat for those cold early-morning games, and $180 in gift cards to Conroy Hockey.",
+        "Get rink ready with a quality hockey stick, a heated stadium seat and $180 in Conroy Hockey gift cards.",
     },
     {
       name: "Chef's Pack",
