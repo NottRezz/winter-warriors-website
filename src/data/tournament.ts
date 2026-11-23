@@ -144,7 +144,7 @@ export const teams: Team[] = [
       { number: "12", name: "Carter Wowk" },
       { number: "17", name: "Easton King" },
       { number: "11", name: "Felix Komierowski" },
-      { number: "15", name: "Gulzzar Dhindsa" },
+      { number: "15", name: "Gulzar Dhindsa" },
       { number: "8", name: "Jack Bateman" },
       { number: "10", name: "Jacob McRae" },
       { number: "18", name: "James Sanchez" },
@@ -209,7 +209,7 @@ export const teams: Team[] = [
     logoSurface: "dark",
     colours: { main: "#900609", trim: "#c9ccd1" },
     roster: [
-      { number: "", name: "Abel Crier" },
+      { number: "18", name: "Abel Crier" },
       { number: "6", name: "Ali Fayad" },
       { number: "19", name: "Ashton Robert" },
       { number: "15", name: "Avery Verstraete" },
@@ -345,6 +345,7 @@ export const awards: Award[] = [
 export const raffle: {
   fiftyFiftyUrl: string;
   drawNotice: string;
+  drawNote: string;
   feature: FeatureDraw | null;
   cash: Prize[];
   draws: Prize[];
@@ -354,6 +355,8 @@ export const raffle: {
   /** Shown at the top of the raffle page. */
   drawNotice:
     "All winners will be drawn on Sunday, November 29, following the conclusion of the second game of the day, in accordance with AGLC guidelines.",
+  /** A highlighted line under the draw notice. */
+  drawNote: "Note: 50/50 boards will be drawn daily.",
   feature: {
     value: "$1,000",
     name: "Tire Gift Certificate",
@@ -377,10 +380,10 @@ export const raffle: {
   ],
   draws: [
     {
-      name: "Stick Raffle",
+      name: "Rink Ready",
       icon: "sticks",
       description:
-        "Details coming soon.",
+        "Everything a hockey family needs for the season: a quality stick for the ice, a heated stadium seat for those cold early-morning games, and $180 in gift cards to Conroy Hockey.",
     },
     {
       name: "Chef's Pack",

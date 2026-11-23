@@ -86,7 +86,7 @@ function PrizeTicket({ prize }: { prize: Prize }) {
 }
 
 export default function RafflePage() {
-  const { feature, cash, draws, drawNotice } = raffle;
+  const { feature, cash, draws, drawNotice, drawNote } = raffle;
   const isEmpty = !feature && cash.length === 0 && draws.length === 0;
 
   return (
@@ -116,7 +116,12 @@ export default function RafflePage() {
               {drawNotice && (
                 <p className="mx-auto mt-4 flex max-w-md items-start gap-3 rounded-xl border border-bronze-300/40 bg-ink/50 p-4 text-left text-ice-100 md:mx-0">
                   <CalendarClock aria-hidden className="mt-0.5 size-5 shrink-0 text-bronze-300" />
-                  <span className="text-pretty">{drawNotice}</span>
+                  <span className="text-pretty">
+                    {drawNotice}
+                    {drawNote && (
+                      <strong className="mt-2 block font-semibold text-bronze-300">{drawNote}</strong>
+                    )}
+                  </span>
                 </p>
               )}
             </div>
