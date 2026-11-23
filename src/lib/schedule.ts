@@ -6,6 +6,7 @@ export function findTeam(value: string): Team | undefined {
 }
 
 export function isFinal(game: Game) {
+  if (game.status) return game.status === "final";
   return game.homeScore !== undefined && game.awayScore !== undefined;
 }
 
@@ -59,6 +60,7 @@ export type GamePhase = "upcoming" | "live" | "over" | "final";
 /** Where a game is at, from its score and the clock. Before the clock is known, it's upcoming. */
 export function gamePhase(game: Game, now: number | null): GamePhase {
   if (isFinal(game)) return "final";
+  if (game.status === "live") return "live";
   const times = gameWindow(game);
   if (now === null || !times || now < times.start) return "upcoming";
   return now < times.end ? "live" : "over";
@@ -141,72 +143,4 @@ export function computeStandings(games: Game[]): StandingRow[] {
       b.goalsFor - b.goalsAgainst - (a.goalsFor - a.goalsAgainst) ||
       a.penaltyMinutes - b.penaltyMinutes,
   );
-}
-
-/** Reads CSV text, including quoted cells, into rows of cells. */
-function parseCsv(text: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let cell = "";
-  let quoted = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    if (quoted) {
-      if (char === '"' && text[i + 1] === '"') {
-        cell += '"';
-        i++;
-      } else if (char === '"') {
-        quoted = false;
-      } else {
-        cell += char;
-      }
-    } else if (char === '"') {
-      quoted = true;
-    } else if (char === ",") {
-      row.push(cell);
-      cell = "";
-    } else if (char === "\n") {
-      row.push(cell);
-      rows.push(row);
-      row = [];
-      cell = "";
-    } else if (char !== "\r") {
-      cell += char;
-    }
-  }
-  row.push(cell);
-  rows.push(row);
-  return rows;
-}
-
-function toNumber(value: string | undefined) {
-  if (!value?.trim()) return undefined;
-  const number = Number(value);
-  return Number.isNaN(number) ? undefined : number;
-}
-
-/** Turns the schedule sheet into games, matching columns by their header. */
-export function gamesFromCsv(text: string): Game[] {
-  const [header, ...rows] = parseCsv(text);
-  const columns = header.map((name) => name.trim().toLowerCase().replace(/\s+/g, "_"));
-
-  return rows
-    .map((cells) => {
-      const read = (name: string) =>
-        cells[columns.indexOf(name)]?.trim() ?? "";
-      return {
-        day: read("day"),
-        time: read("time"),
-        home: read("home"),
-        away: read("away"),
-        homeScore: toNumber(read("home_score")),
-        awayScore: toNumber(read("away_score")),
-        homePim: toNumber(read("home_pim")),
-        awayPim: toNumber(read("away_pim")),
-        stage: read("stage") || undefined,
-        note: read("note") || undefined,
-      };
-    })
-    .filter((game) => game.home && game.away);
 }

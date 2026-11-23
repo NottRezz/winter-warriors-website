@@ -72,6 +72,8 @@ export type Sponsor = {
 };
 
 export type Game = {
+  /** Set for every game, so the scorekeeper panel can update one game at a time. */
+  id: string;
   /** Any format that includes the date, e.g. "2026-11-28", "Nov 28" or "Sat". */
   day: string;
   time: string;
@@ -85,6 +87,11 @@ export type Game = {
   /** Blank counts as round robin. Anything else stays out of the standings. */
   stage?: string;
   note?: string;
+  /**
+   * Set from the scorekeeper panel. "live" shows the score as it stands; "final" counts
+   * it in the standings. Without it, a game with both scores counts as final.
+   */
+  status?: "upcoming" | "live" | "final";
 };
 
 export const tournament = {
@@ -114,12 +121,6 @@ export const tournament = {
   utcOffset: "-06:00",
   /** Shown in the footer and on every "coming soon" card once filled in. */
   contactEmail: "",
-  /**
-   * Link to the schedule Google Sheet (File > Share > Publish to web > CSV).
-   * While set, the site reads games from the sheet and refreshes every minute,
-   * so scores can be updated from a phone. See README.md.
-   */
-  scheduleCsvUrl: "",
   scoring: {
     win: 2,
     tie: 1,
@@ -273,16 +274,16 @@ export const teams: Team[] = [
   },
 ];
 
-/** Used when scheduleCsvUrl is blank. */
+/** The starting schedule. Scorekeepers update scores from /admin once the site is live. */
 export const games: Game[] = [
-  { day: "2026-11-28", time: "8:15 – 9:15 AM", home: "Raiders", away: "Knights" },
-  { day: "2026-11-28", time: "9:30 – 10:30 AM", home: "Pirates", away: "Wolverines" },
-  { day: "2026-11-28", time: "3:45 – 5:00 PM", home: "Wolverines", away: "Raiders" },
-  { day: "2026-11-28", time: "5:15 – 6:30 PM", home: "Knights", away: "Pirates" },
-  { day: "2026-11-29", time: "8:15 – 9:15 AM", home: "Raiders", away: "Pirates" },
-  { day: "2026-11-29", time: "9:30 – 10:30 AM", home: "Knights", away: "Wolverines" },
-  { day: "2026-11-29", time: "2:30 – 3:45 PM", home: "TBD", away: "TBD", stage: "B Final" },
-  { day: "2026-11-29", time: "4:00 – 5:15 PM", home: "TBD", away: "TBD", stage: "A Final" },
+  { id: "sat-1", day: "2026-11-28", time: "8:15 – 9:15 AM", home: "Raiders", away: "Knights" },
+  { id: "sat-2", day: "2026-11-28", time: "9:30 – 10:30 AM", home: "Pirates", away: "Wolverines" },
+  { id: "sat-3", day: "2026-11-28", time: "3:45 – 5:00 PM", home: "Wolverines", away: "Raiders" },
+  { id: "sat-4", day: "2026-11-28", time: "5:15 – 6:30 PM", home: "Knights", away: "Pirates" },
+  { id: "sun-1", day: "2026-11-29", time: "8:15 – 9:15 AM", home: "Raiders", away: "Pirates" },
+  { id: "sun-2", day: "2026-11-29", time: "9:30 – 10:30 AM", home: "Knights", away: "Wolverines" },
+  { id: "sun-3", day: "2026-11-29", time: "2:30 – 3:45 PM", home: "TBD", away: "TBD", stage: "B Final" },
+  { id: "sun-4", day: "2026-11-29", time: "4:00 – 5:15 PM", home: "TBD", away: "TBD", stage: "A Final" },
 ];
 
 export const rules: { title: string; items: string[] }[] = [

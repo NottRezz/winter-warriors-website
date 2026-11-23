@@ -75,8 +75,9 @@ export function GameCard({ game, day }: { game: Game; day?: string }) {
         )}
       </header>
       <div className="mt-3.5 grid gap-2.5">
-        <Side label={game.home} role="Home" score={game.homeScore} won={homeWon} />
-        <Side label={game.away} role="Visitor" score={game.awayScore} won={awayWon} />
+        {/* While a game is on, both sides of the score read at full strength. */}
+        <Side label={game.home} role="Home" score={game.homeScore} won={homeWon || phase === "live"} />
+        <Side label={game.away} role="Visitor" score={game.awayScore} won={awayWon || phase === "live"} />
       </div>
       {game.note && <p className="mt-3 text-sm text-ice-300">{game.note}</p>}
     </article>

@@ -1,10 +1,10 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { games as localGames, tournament, type Game } from "@/data/tournament";
-import { gamesFromCsv } from "@/lib/schedule";
+import { games as localGames, type Game } from "@/data/tournament";
+import { asset } from "@/lib/asset";
 
-const REFRESH_MS = 60_000;
+const REFRESH_MS = 15_000;
 const TIMEOUT_MS = 15_000;
 
 type State = { games: Game[]; updatedAt: Date | null; failed: boolean };
@@ -30,14 +30,10 @@ async function refresh() {
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    const response = await fetch(tournament.scheduleCsvUrl, {
-      cache: "no-store",
-      signal: controller.signal,
-    });
-    if (!response.ok) throw new Error(`Sheet returned ${response.status}`);
-    const games = gamesFromCsv(await response.text());
-    // An unpublished or half-edited sheet can answer with a page that has no games in it.
-    if (games.length === 0) throw new Error("Sheet had no games");
+    const response = await fetch(asset("/api/games"), { signal: controller.signal });
+    if (!response.ok) throw new Error(`Scores answered ${response.status}`);
+    const { games } = (await response.json()) as { games: Game[] };
+    if (!Array.isArray(games)) throw new Error("No games in the answer");
     publish({ games, updatedAt: new Date(), failed: false });
   } catch {
     // Keep showing the last good copy; the next refresh may recover.
@@ -58,7 +54,7 @@ let timer: ReturnType<typeof setInterval> | undefined;
 function subscribe(listener: () => void) {
   listeners.add(listener);
 
-  if (tournament.scheduleCsvUrl && listeners.size === 1) {
+  if (listeners.size === 1) {
     refresh();
     timer = setInterval(refresh, REFRESH_MS);
     document.addEventListener("visibilitychange", refreshIfVisible);
@@ -75,10 +71,10 @@ function subscribe(listener: () => void) {
 }
 
 /**
- * Games from the published Google Sheet when one is set, otherwise the data file. The
- * data file's schedule also shows until the sheet first loads, or if it can't be reached.
+ * Games with the scorekeepers' latest scores. The data file's schedule shows until the
+ * scores first load, or if they can't be reached.
  */
 export function useGames() {
   const current = useSyncExternalStore(subscribe, () => state, () => initial);
-  return { ...current, isLive: Boolean(tournament.scheduleCsvUrl) };
+  return { ...current, isLive: true };
 }

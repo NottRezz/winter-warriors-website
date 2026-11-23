@@ -13,15 +13,18 @@ npm run dev
 
 **This GitHub repository is public, and it publishes the tournament website.** Anyone can read it, including earlier versions of its files. It holds only what appears on the website. Never commit birthdates, addresses, phone numbers, parent details, registration numbers, spreadsheets or other private documents.
 
-The website is live at https://nottrezz.github.io/winter-warriors-website/. It's a static site, so it can also go on any other web host:
+The website is hosted on Vercel, which builds and publishes every push to `main`. The pages are built ahead of time; `/api` handles the live scores and the scorekeeper login.
 
-1. Set `NEXT_PUBLIC_SITE_URL` to the live address, for example `https://example.com`, so social media previews can find the sharing image. If the site will live in a sub-folder, also set `NEXT_PUBLIC_BASE_PATH`, for example `/tournament`.
-2. Run `npm run build`, not `npx next build`, so the prefetch files end up where the site expects them.
-3. Upload everything inside `out/` to the host.
+### Setting up the Vercel project
 
-### GitHub Pages
+1. Import this repository in Vercel. The defaults (Next.js, `npm run build`) are right.
+2. **Storage > Create Database > Upstash for Redis**, free plan, connected to the project. This adds `KV_REST_API_URL` and `KV_REST_API_TOKEN`, where the scores are kept.
+3. **Settings > Environment Variables**, add:
+   - `ADMIN_USERNAME` and `ADMIN_PASSWORD`, the one login the scorekeepers share.
+   - `NEXT_PUBLIC_SITE_URL`, the live address, for example `https://winter-warriors.vercel.app`, so social media previews find the sharing image.
+4. Redeploy so the variables take effect.
 
-Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which publishes the website to GitHub Pages. In **Settings > Pages**, set **Source** to **GitHub Actions**. **Deploy from a branch** publishes this README as a plain page instead of building the site.
+The login lives in Vercel rather than in the code because this repository is public. Changing `ADMIN_PASSWORD` and redeploying signs every scorekeeper out.
 
 ## Updating content
 
@@ -39,26 +42,21 @@ Set `tournament.sampleData` to `true` to show a preview notice at the top of eve
 | Sponsors | `sponsors` (see [Sponsor logos](#sponsor-logos)) |
 | Points system | `tournament.scoring` |
 
-## Live scores from a Google Sheet
+## Live scores: the scorekeeper panel
 
-Scores can be updated during the tournament without touching the code:
+Scorekeepers go to `/admin` on the live site and sign in with the shared login. Every game is listed by day, with:
 
-1. Import [`docs/schedule-template.csv`](docs/schedule-template.csv), which already has all the games, into a new Google Sheet. Keep the column headers as they are.
-2. In the sheet, go to **File > Share > Publish to web**, pick the schedule tab and **Comma-separated values (.csv)**, then publish.
-3. Paste the link into `tournament.scheduleCsvUrl`, then rebuild and upload the site once.
+- **Upcoming / Live / Final.** A live game shows its running score and an "On now" badge. Only **Final** games count in the standings, and a game can't be marked final without both scores.
+- **− and +** beside each team for goals, then **Save**. Each game saves on its own, so two scorekeepers can work on different games at once.
+- **Penalty minutes, note and game details**: PIM (used for tie-breaks), a note shown on the game such as "Won in a shootout", and the day, time and stage.
+- Team pickers, to put the right teams into the finals once the round robin is done. The game then appears on both teams' pages.
+- **Add a game** and **Remove game**, for schedule changes, and **Reset to the original schedule**, which erases every score.
 
-From then on, typing scores into the sheet updates the site, usually within a few minutes. Google delays published sheets slightly, and open pages check for changes once a minute.
+Open pages pick up changes within about 20 seconds. If the scores can't be reached, the site keeps the last ones it loaded and tries again.
 
-The Schedule, the standings and the Games section on every team page all read the same sheet. During the tournament:
+Until something is saved, the site shows the `games` list from the data file. After the first save the panel is the source of truth, so change the schedule there, not in the data file (or use **Reset** to reload the data file's games).
 
-- Enter both scores when a game is over. A game counts as finished, and counts in the standings, as soon as both are filled in, so don't type running scores.
-- If a final goes to a shootout, give the winner one extra goal, so the winner is highlighted.
-- Once the finals are decided, replace `TBD` in the `home` and `away` columns. The game then appears on both teams' pages.
-- If the sheet can't be reached, the site keeps the last scores it loaded and tries again.
-
-Team names only need to contain the team (`Raiders`, `Pirates`, `Knights` or `Wolverines`). Use a label such as `1st Place` until a final is decided. Standings count round robin games only.
-
-Without a sheet, add games to the `games` list in the data file instead.
+Running `npm run dev` without the Redis variables keeps scores in memory, so the panel can be tried locally. Put `ADMIN_USERNAME` and `ADMIN_PASSWORD` in `.env.local` for that.
 
 ## Sponsor logos
 
