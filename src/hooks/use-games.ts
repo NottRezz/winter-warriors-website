@@ -30,7 +30,7 @@ async function refresh() {
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    const response = await fetch(asset("/api/games"), { signal: controller.signal });
+    const response = await fetch(asset("/api/games/"), { signal: controller.signal });
     if (!response.ok) throw new Error(`Scores answered ${response.status}`);
     const { games } = (await response.json()) as { games: Game[] };
     if (!Array.isArray(games)) throw new Error("No games in the answer");

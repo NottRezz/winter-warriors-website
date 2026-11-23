@@ -72,7 +72,7 @@ function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
     setBusy(true);
     setError("");
     try {
-      await api("/api/session", {
+      await api("/api/session/", {
         method: "POST",
         body: JSON.stringify({ username: form.get("username"), password: form.get("password") }),
       });
@@ -207,7 +207,7 @@ function GameEditor({
     setBusy(true);
     setError("");
     try {
-      const saved = await api<Saved>("/api/games", { method: "POST", body: JSON.stringify(body) });
+      const saved = await api<Saved>("/api/games/", { method: "POST", body: JSON.stringify(body) });
       // The server tidies what it saves (trimmed spaces and so on), so show its copy.
       const mine = saved.games.find((other) => other.id === game.id);
       if (mine) setDraft(toDraft(mine));
@@ -411,7 +411,7 @@ function Scoreboard({ onSignedOut }: { onSignedOut: () => void }) {
 
   const load = useCallback(async () => {
     try {
-      setSaved(await api<Saved>("/api/games?fresh"));
+      setSaved(await api<Saved>("/api/games/?fresh"));
       setError("");
     } catch (failure) {
       setError((failure as Error).message);
@@ -431,7 +431,7 @@ function Scoreboard({ onSignedOut }: { onSignedOut: () => void }) {
   async function change(body: object, question?: string) {
     if (question && !confirm(question)) return;
     try {
-      setSaved(await api<Saved>("/api/games", { method: "POST", body: JSON.stringify(body) }));
+      setSaved(await api<Saved>("/api/games/", { method: "POST", body: JSON.stringify(body) }));
     } catch (failure) {
       if ((failure as { status?: number }).status === 401) onSignedOut();
       setError((failure as Error).message);
@@ -439,7 +439,7 @@ function Scoreboard({ onSignedOut }: { onSignedOut: () => void }) {
   }
 
   async function signOut() {
-    await api("/api/session", { method: "DELETE" }).catch(() => {});
+    await api("/api/session/", { method: "DELETE" }).catch(() => {});
     onSignedOut();
   }
 
@@ -543,7 +543,7 @@ export function AdminPanel() {
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
-    api<{ signedIn: boolean }>("/api/session")
+    api<{ signedIn: boolean }>("/api/session/")
       .then((session) => setSignedIn(session.signedIn))
       .catch(() => setSignedIn(false));
   }, []);
