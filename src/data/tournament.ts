@@ -345,7 +345,6 @@ export const awards: Award[] = [
 export const raffle: {
   fiftyFiftyUrl: string;
   drawNotice: string;
-  drawNote: string;
   feature: FeatureDraw | null;
   cash: Prize[];
   draws: Prize[];
@@ -355,8 +354,6 @@ export const raffle: {
   /** Shown at the top of the raffle page. */
   drawNotice:
     "All winners will be drawn on Sunday, November 29, following the conclusion of the second game of the day, in accordance with AGLC guidelines.",
-  /** A highlighted line under the draw notice. */
-  drawNote: "Note: 50/50 boards will be drawn daily.",
   feature: {
     value: "$1,000",
     name: "Tire Gift Certificate",
@@ -434,7 +431,7 @@ export const raffle: {
         "Satisfy your sweet tooth with an extra-large treat basket, then gear up with a $100 gift card to Hockey Life.",
     },
     {
-      name: "Sweets and Scratch",
+      name: "Sweet Hat Trick",
       icon: "clover",
       description:
         "Indulge in a chocolate gift basket, then try your luck with a variety of lottery scratch cards.",
