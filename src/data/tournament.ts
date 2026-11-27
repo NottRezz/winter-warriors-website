@@ -192,9 +192,9 @@ export const teams: Team[] = [
       { number: "10", name: "Yoonjae Chun" },
     ],
     staff: [
-      { name: "Mike Bye", role: "Head Coach" },
+      { name: "Mike Bye", role: "Co-Head Coach" },
+      { name: "Rob McGowan", role: "Co-Head Coach" },
       { name: "Brad Lacher", role: "Assistant Coach" },
-      { name: "Rob McGowan", role: "Assistant Coach" },
       { name: "Terry Havanka", role: "Assistant Coach" },
       { name: "Travis Dakin", role: "Assistant Coach" },
       { name: "Tyler Vandemark", role: "Assistant Coach" },
